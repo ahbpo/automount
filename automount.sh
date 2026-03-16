@@ -3,6 +3,8 @@
 device=$1
 mountpoint=$2
 is_root=0
+main_dir=$(pwd)
+
 if [ "$(whoami)" == "root" ]; then
 	echo "root"
 	is_root=1
@@ -16,8 +18,16 @@ elif [ ! -d "$mountpoint" ]; then
 	exit 1
 else
 	if [ $is_root -eq 1 ]; then
-		mount $device
+		mount $device $mountpoint
 	else
 		sudo mount $device $mountpoint
+	fi
+	cd $mountpoint
+	bash
+	cd $main_dir
+	if [ $is_root -eq 1 ]; then
+		umount $device
+	else
+		sudo umount $device
 	fi
 fi
