@@ -14,4 +14,10 @@ if [ ! -b "$device" ]; then
 elif [ ! -d "$mountpoint" ]; then
 	echo "mount point is not valid"
 	exit 1
+else
+	if [ $is_root -eq 1 ]; then
+		mount $device
+	else
+		sudo mount $device $mountpoint
+	fi
 fi
