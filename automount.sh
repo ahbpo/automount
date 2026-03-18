@@ -3,11 +3,13 @@
 device=$1
 mountpoint=$2
 is_root=0
+suffix_char="$"
 main_dir=$(pwd)
 
 if [ "$(whoami)" == "root" ]; then
 	echo "root"
 	is_root=1
+	suffix_char="#"
 fi
 
 if [ ! -b "$device" ]; then
@@ -23,7 +25,7 @@ else
 		sudo mount $device $mountpoint
 	fi
 	cd $mountpoint
-	bash
+	bash --rcfile <(echo "PS1=\"(\e[0;36mautomount session\e[0m) \u \w $suffix_char \"")
 	cd $main_dir
 	if [ $is_root -eq 1 ]; then
 		umount $device
